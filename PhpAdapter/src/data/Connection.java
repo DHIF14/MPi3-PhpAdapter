@@ -13,15 +13,19 @@ public class Connection extends Thread {
     private final String username, password;
     private Date lastCommunicated;
     private final String authLine;
-    private String command;
+    private final BufferedWriter bw;
+    private final BufferedReader br;
 
-    public Connection(Socket socket, String authLine) {
+    public Connection(Socket socket, String authLine) throws IOException {
+        //setDaemon(true);
         this.socket = socket;
         this.authLine = authLine;
         String[] authParts = authLine.split("#");
         sessionID = Integer.parseInt(authParts[0]);
         username = authParts[1];
         password = authParts[2];
+        br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
 
     public void start() {
@@ -31,20 +35,19 @@ public class Connection extends Thread {
     @Override
     public void run() {
         try {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            while (true) {
-                wait();
+            while (isAlive()) {
+
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
-    public boolean sendCommand(String command) {
-        interrupt();
-        this.command = command;
-        return true;
+    public String sendCommand(String command) throws InterruptedException, IOException {
+        bw.write(command);
+        bw.newLine();
+        bw.flush();
+        return br.readLine();
     }
 
     public String toString() {

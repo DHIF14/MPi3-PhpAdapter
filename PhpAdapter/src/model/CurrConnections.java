@@ -14,6 +14,10 @@ public class CurrConnections extends AbstractListModel<Connection> {
 
     private List<Connection> connectionList = new ArrayList<>();
 
+    public void add(Connection c){
+        connectionList.add(c);
+    }
+
     @Override
     public int getSize() {
         return connectionList.size();
@@ -30,5 +34,13 @@ public class CurrConnections extends AbstractListModel<Connection> {
                 return false;
         }
         return true;
+    }
+
+    public Connection getConnectionWith(String authLine)throws Exception{
+        for(Connection c : connectionList){
+            if(c.toString().equals(authLine))
+                return c;
+        }
+        throw new Exception("no match found. adding...");
     }
 }
