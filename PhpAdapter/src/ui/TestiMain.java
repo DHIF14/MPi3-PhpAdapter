@@ -11,10 +11,14 @@ import java.net.Socket;
 public class TestiMain {
     public static void main(String[] args) throws Exception{
 
-        Server server = new Server(7778);
-        server.start();
-
-        /*Socket socket = new Socket("localhost", 7777);
+        while(true) {
+            try {
+                Server server = new Server(7778);
+                server.start();
+                server.join();
+            }catch(Exception e){}
+        }
+         /*Socket socket = new Socket("localhost", 7777);
         Connection con = new Connection(socket, "7#mutter#lel");
         Thread.sleep(500);
         con.start();

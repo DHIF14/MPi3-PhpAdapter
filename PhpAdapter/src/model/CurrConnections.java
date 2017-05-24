@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by feba6481 on 23.05.17.
@@ -43,4 +44,20 @@ public class CurrConnections extends AbstractListModel<Connection> {
         }
         throw new Exception("no match found. adding...");
     }
+
+    public int createSessionID() {
+        Random rand = new Random();
+        int num;
+        while(isPresent(num = rand.nextInt()));
+        return num;
+    }
+
+    public boolean isPresent(int num){
+        for(Connection c : connectionList){
+            if(c.getSessionID()==num)
+                return true;
+        }
+        return false;
+    }
 }
+

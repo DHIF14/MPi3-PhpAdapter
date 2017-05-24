@@ -3,6 +3,7 @@ package data;
 import java.io.*;
 import java.net.Socket;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by feba6481 on 23.05.17.
@@ -18,12 +19,13 @@ public class Connection extends Thread {
 
     public Connection(Socket socket, String authLine) throws IOException {
         //setDaemon(true);
+        System.out.println("new connection");
         this.socket = socket;
         this.authLine = authLine;
         String[] authParts = authLine.split("#");
-        sessionID = Integer.parseInt(authParts[0]);
-        username = authParts[1];
-        password = authParts[2];
+        sessionID = Integer.parseInt(authParts[0].trim());
+        username = authParts[1].trim();
+        password = authParts[2].trim();
         br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
@@ -36,7 +38,7 @@ public class Connection extends Thread {
     public void run() {
         try {
             while (isAlive()) {
-
+                sleep(5000);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,5 +54,9 @@ public class Connection extends Thread {
 
     public String toString() {
         return authLine;
+    }
+
+    public int getSessionID(){
+        return sessionID;
     }
 }
