@@ -9,6 +9,7 @@ import java.util.Random;
  * Created by feba6481 on 23.05.17.
  */
 public class Connection extends Thread {
+
     private final Socket socket;
     private final int sessionID;
     private final String username, password;
@@ -19,9 +20,9 @@ public class Connection extends Thread {
 
     public Connection(Socket socket, String authLine) throws IOException {
         //setDaemon(true);
-        System.out.println("new connection");
         this.socket = socket;
         this.authLine = authLine;
+        System.out.println(authLine);
         String[] authParts = authLine.split("#");
         sessionID = Integer.parseInt(authParts[0].trim());
         username = authParts[1].trim();
@@ -45,11 +46,11 @@ public class Connection extends Thread {
         }
     }
 
-    public String sendCommand(String command) throws InterruptedException, IOException {
-        bw.write(command);
+    public String sendCommand(String command) throws IOException {
+        bw.write(command.trim());
         bw.newLine();
         bw.flush();
-        return br.readLine();
+        return br.readLine().trim();
     }
 
     public String toString() {
