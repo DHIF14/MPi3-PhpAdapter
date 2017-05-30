@@ -39,7 +39,7 @@ public class Server extends Thread {
                 String authLine = br.readLine();
                 Connection con = null;
                 if (authLine.equals("GIMME_SESSION_PLZ")) {
-                    createSession(br, bw);
+                    createSession(br, bw, authLine);
                 } else {
                     try {
                         System.out.println(authLine);
@@ -64,7 +64,7 @@ public class Server extends Thread {
         }
     }
 
-    private void createSession(BufferedReader br, BufferedWriter bw) throws IOException{
+    private void createSession(BufferedReader br, BufferedWriter bw, String authLine) throws IOException{
         System.out.println("new session.");
         int id = connectionsModel.createSessionID();
         System.out.println("id: " + id);
@@ -72,6 +72,11 @@ public class Server extends Thread {
         bw.newLine();
         bw.flush();
         System.out.println(br.readLine());
+        Connection con = new Connection(new Socket(SERVER_IP, SERVER_PORT), authLine);
+        connectionsModel.add(con);
+        if(con.sendCommand("DEEERE").equals("AUTH")){
+            //INCOMINGGGG
+        }
     }
 
 }
