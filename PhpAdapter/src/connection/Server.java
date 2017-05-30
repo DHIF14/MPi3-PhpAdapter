@@ -39,15 +39,7 @@ public class Server extends Thread {
                 String authLine = br.readLine();
                 Connection con = null;
                 if (authLine.equals("GIMME_SESSION_PLZ")) {
-                    System.out.println("new session.");
-                    int id = connectionsModel.createSessionID();
-                    System.out.println("id: " + id);
-                    bw.write(id + "");
-                    bw.newLine();
-                    bw.flush();
-                    System.out.println(br.readLine());
-
-                    //problem when first getting id and then establishing connection
+                    createSession(br, bw);
                 } else {
                     try {
                         System.out.println(authLine);
@@ -70,6 +62,16 @@ public class Server extends Thread {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void createSession(BufferedReader br, BufferedWriter bw) throws IOException{
+        System.out.println("new session.");
+        int id = connectionsModel.createSessionID();
+        System.out.println("id: " + id);
+        bw.write(id + "");
+        bw.newLine();
+        bw.flush();
+        System.out.println(br.readLine());
     }
 
 }
